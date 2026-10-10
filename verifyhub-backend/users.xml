@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<users>
+
+  <user>
+    <id>1</id>
+    <userId>user01</userId>
+    <password>user123</password>
+    <name>Ananya Sharma</name>
+    <role>General User</role>
+  </user>
+  <user>
+    <id>2</id>
+    <userId>admin01</userId>
+    <password>admin123</password>
+    <name>Admin User</name>
+    <role>Admin</role>
+  </user>
+  <user>
+    <id>3</id>
+    <userId>persist01</userId>
+    <password>test123</password>
+    <name>Persistent Test</name>
+    <role>General User</role>
+  </user>
+
+</users>

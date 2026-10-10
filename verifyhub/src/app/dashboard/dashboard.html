@@ -1,0 +1,558 @@
+
+<div class="dashboard-page">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-glow"></div>
+
+    <div class="brand">
+      <div class="brand-icon"><span>✓</span></div>
+      <div class="brand-text">
+        <h1>VerifyHub</h1>
+        <span>Verification Portal</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <div class="nav-label">MAIN MENU</div>
+
+      <a class="nav-item active" href="#dashboard-home">
+        <span class="nav-icon">▦</span>
+        <span>Dashboard</span>
+      </a>
+
+      <a class="nav-item" href="#verification-records">
+        <span class="nav-icon">✓</span>
+        <span>Verification Records</span>
+      </a>
+
+      @if (user?.role === 'Admin') {
+        <div class="nav-label admin-label">ADMINISTRATION</div>
+
+        <a class="nav-item" href="#user-management">
+          <span class="nav-icon">♙</span>
+          <span>User Management</span>
+        </a>
+      }
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <div class="sidebar-status">
+        <span class="status-dot"></span>
+        <div>
+          <strong>System Online</strong>
+          <small>All services operational</small>
+        </div>
+      </div>
+
+      <button class="logout-btn" type="button" (click)="logout()">
+        <span class="logout-icon">↪</span>
+        <span>Logout</span>
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <header class="topbar">
+
+      <div class="page-heading">
+        <div class="heading-icon">▦</div>
+        <div>
+          <h2>Dashboard</h2>
+          <p>Employee verification overview</p>
+        </div>
+      </div>
+
+      <div class="profile">
+        <div class="profile-details">
+          <strong>{{ user?.name }}</strong>
+          <span>{{ user?.role }}</span>
+        </div>
+        <div class="avatar">
+          {{ user?.name?.charAt(0) }}
+        </div>
+      </div>
+
+    </header>
+
+
+    <section class="content" id="dashboard-home">
+
+      <!-- WELCOME HERO -->
+      <div class="welcome">
+
+        <div class="welcome-glow glow-one"></div>
+        <div class="welcome-glow glow-two"></div>
+
+        <div class="welcome-content">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            SECURE VERIFICATION PLATFORM
+          </div>
+
+          <h1>
+            Welcome back, <span>{{ user?.name }}</span> 👋
+          </h1>
+
+          <p>
+            Here's what's happening with your verification records.
+          </p>
+
+          <div class="welcome-meta">
+            <div class="meta-item">
+              <span class="meta-icon">✓</span>
+              <span>Secure session</span>
+            </div>
+
+            <div class="meta-divider"></div>
+
+            <div class="meta-item">
+              <span class="meta-icon">◉</span>
+              <span>{{ user?.role }} access</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="welcome-visual">
+          <div class="visual-ring ring-one"></div>
+          <div class="visual-ring ring-two"></div>
+          <div class="visual-ring ring-three"></div>
+
+          <div class="visual-core">
+            <div class="core-check">✓</div>
+          </div>
+
+          <span class="orbit-dot dot-one"></span>
+          <span class="orbit-dot dot-two"></span>
+          <span class="orbit-dot dot-three"></span>
+        </div>
+
+        <div class="secure-badge">
+          <span>🔒</span>
+          Secure Access
+        </div>
+
+      </div>
+
+
+      <!-- SUMMARY CARDS -->
+      <div class="summary-grid">
+
+        <div class="summary-card records-card">
+          <div class="card-top">
+            <div class="card-icon records-icon">▦</div>
+            <span class="card-arrow">↗</span>
+          </div>
+
+          <div class="card-content">
+            <span class="card-label">Total Records</span>
+            <h3>{{ records?.length ?? 0 }}</h3>
+            <div class="card-footer">
+              <span class="footer-dot"></span>
+              All verification records
+            </div>
+          </div>
+        </div>
+
+
+        <div class="summary-card verified-card">
+          <div class="card-top">
+            <div class="card-icon verified-icon">✓</div>
+            <span class="card-arrow">↗</span>
+          </div>
+
+          <div class="card-content">
+            <span class="card-label">Verified</span>
+            <h3>{{ getVerifiedCount() }}</h3>
+            <div class="card-footer success-footer">
+              <span class="footer-dot"></span>
+              Successfully verified
+            </div>
+          </div>
+        </div>
+
+
+        <div class="summary-card pending-card">
+          <div class="card-top">
+            <div class="card-icon pending-icon">◷</div>
+            <span class="card-arrow">↗</span>
+          </div>
+
+          <div class="card-content">
+            <span class="card-label">Pending</span>
+            <h3>{{ getPendingCount() }}</h3>
+            <div class="card-footer pending-footer">
+              <span class="footer-dot"></span>
+              Awaiting verification
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- VERIFICATION RECORDS -->
+      <section class="records-section" id="verification-records">
+
+        <div class="section-header">
+
+          <div class="section-title">
+            <div class="section-icon">✓</div>
+            <div>
+              <h2>Verification Records</h2>
+              <p>Recently processed employee verifications</p>
+            </div>
+          </div>
+
+          <div class="section-actions">
+            <span class="live-indicator">
+              <span></span>
+              Live
+            </span>
+
+            <span class="record-count">
+              {{ records?.length ?? 0 }} Records
+            </span>
+          </div>
+
+        </div>
+
+
+        @if (loading) {
+          <div class="loading-container">
+            <div class="loading-visual">
+              <div class="spinner"></div>
+            </div>
+            <strong>Loading verification records</strong>
+            <p>Processing your request securely...</p>
+          </div>
+        }
+
+        @else if (errorMessage) {
+          <div class="error-container">
+            <div class="error-icon">!</div>
+            <strong>Unable to load records</strong>
+            <p>{{ errorMessage }}</p>
+          </div>
+        }
+
+        @else {
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Employee</th>
+                  <th>Verification Type</th>
+                  <th>Status</th>
+                  <th>Access Level</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (record of records ?? []; track record.id) {
+                  <tr>
+                    <td>
+                      <span class="record-id">{{ record.id }}</span>
+                    </td>
+
+                    <td>
+                      <div class="employee-cell">
+                        <div class="employee-avatar">
+                          {{ record.employeeName.charAt(0) }}
+                        </div>
+                        <strong>{{ record.employeeName }}</strong>
+                      </div>
+                    </td>
+
+                    <td>
+                      <span class="verification-type">
+                        {{ record.verificationType }}
+                      </span>
+                    </td>
+
+                    <td>
+                      @if (record.status === 'Verified') {
+                        <span class="status verified">
+                          <span class="status-dot-small"></span>
+                          Verified
+                        </span>
+                      }
+                      @else {
+                        <span class="status pending">
+                          <span class="status-dot-small"></span>
+                          Pending
+                        </span>
+                      }
+                    </td>
+
+                    <td>
+                      <span class="access-badge">
+                        <span class="access-icon">●</span>
+                        {{ record.accessLevel }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+      </section>
+
+
+      <!-- ADMIN USER MANAGEMENT -->
+      @if (user?.role === 'Admin') {
+
+        <section class="records-section admin-section" id="user-management">
+
+          <div class="section-header">
+
+            <div class="section-title">
+              <div class="section-icon admin-icon">♙</div>
+              <div>
+                <h2>User Management</h2>
+                <p>Manage VerifyHub user accounts</p>
+              </div>
+            </div>
+
+            <button
+              class="add-user-btn"
+              type="button"
+              (click)="openAddUserForm()"
+            >
+              <span>+</span>
+              Add User
+            </button>
+
+          </div>
+
+
+          @if (userActionMessage) {
+            <div class="action-message">
+              <span class="message-icon">✓</span>
+              <span>{{ userActionMessage }}</span>
+            </div>
+          }
+
+
+          <!-- CREATE USER FORM -->
+          @if (showAddUserForm) {
+
+            <div class="add-user-card">
+
+              <div class="form-header">
+
+                <div class="form-heading">
+                  <div class="form-icon">+</div>
+                  <div>
+                    <h3>Create New User</h3>
+                    <p>Add a new VerifyHub account</p>
+                  </div>
+                </div>
+
+                <button
+                  class="close-btn"
+                  type="button"
+                  aria-label="Close form"
+                  (click)="closeAddUserForm()"
+                >
+                  ×
+                </button>
+
+              </div>
+
+
+              <div class="user-form-grid">
+
+                <div class="form-group">
+                  <label for="new-user-name">Full Name</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">◯</span>
+                    <input
+                      id="new-user-name"
+                      type="text"
+                      [(ngModel)]="newUser.name"
+                      placeholder="Enter full name"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="new-user-id">User ID</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">@</span>
+                    <input
+                      id="new-user-id"
+                      type="text"
+                      [(ngModel)]="newUser.userId"
+                      placeholder="Enter user ID"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="new-user-password">Password</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">◆</span>
+                    <input
+                      id="new-user-password"
+                      type="password"
+                      [(ngModel)]="newUser.password"
+                      placeholder="Enter password"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="new-user-role">Role</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">◈</span>
+                    <select
+                      id="new-user-role"
+                      [(ngModel)]="newUser.role"
+                    >
+                      <option value="General User">General User</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="form-actions">
+
+                <button
+                  class="cancel-btn"
+                  type="button"
+                  (click)="closeAddUserForm()"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  class="save-user-btn"
+                  type="button"
+                  (click)="addUser()"
+                >
+                  <span>✓</span>
+                  Create User
+                </button>
+
+              </div>
+
+            </div>
+
+          }
+
+
+          <!-- USERS LOADING -->
+          @if (usersLoading) {
+            <div class="loading-container">
+              <div class="loading-visual">
+                <div class="spinner"></div>
+              </div>
+              <strong>Loading users</strong>
+              <p>Fetching account information...</p>
+            </div>
+          }
+
+          @else if (usersErrorMessage) {
+            <div class="error-container">
+              <div class="error-icon">!</div>
+              <strong>Unable to load users</strong>
+              <p>{{ usersErrorMessage }}</p>
+            </div>
+          }
+
+          @else {
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (item of users ?? []; track item.id) {
+                    <tr>
+                      <td>
+                        <span class="record-id">#{{ item.id }}</span>
+                      </td>
+
+                      <td>
+                        <span class="user-id-text">{{ item.userId }}</span>
+                      </td>
+
+                      <td>
+                        <div class="employee-cell">
+                          <div class="employee-avatar user-avatar">
+                            {{ item.name.charAt(0) }}
+                          </div>
+                          <strong>{{ item.name }}</strong>
+                        </div>
+                      </td>
+
+                      <td>
+                        <span
+                          class="user-role-badge"
+                          [class.admin-role]="item.role === 'Admin'"
+                        >
+                          <span class="role-dot"></span>
+                          {{ item.role }}
+                        </span>
+                      </td>
+
+                      <td>
+                        @if (item.userId === 'admin01') {
+                          <span class="protected-label">
+                            <span>◆</span>
+                            Protected
+                          </span>
+                        }
+                        @else {
+                          <button
+                            class="delete-user-btn"
+                            type="button"
+                            (click)="deleteUser(item)"
+                          >
+                            Delete
+                          </button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+          }
+
+        </section>
+
+      }
+
+    </section>
+
+  </main>
+
+</div>
