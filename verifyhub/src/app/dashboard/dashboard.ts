@@ -25,9 +25,8 @@ import {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [
-    FormsModule
-  ],
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
